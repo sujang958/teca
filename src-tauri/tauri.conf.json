@@ -39,7 +39,7 @@
         "resizable": true,
         "title": "teca",
         "width": 270,
-        "height": 110,
+        "height": 130,
         "label": "main",
         "decorations": false,
         "transparent": true
