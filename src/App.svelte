@@ -101,6 +101,7 @@
     <p class="text-xl">TOTAL</p>
     <p class="text-lg -mt-2">
       {Object.entries(counts)
+        .filter(([key, _]) => targetKeys.includes(key))
         .map(([_, value]) => value)
         .reduce((a, b) => a + b, 0n)}
     </p>
