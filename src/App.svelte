@@ -5,11 +5,23 @@
   const unlistens: UnlistenFn[] = []
 
   listen("keyDown", (event) => {
-    console.log("Down", event.payload)
+    if (typeof event.payload !== "object") return
+    if (!("key" in event.payload)) return
+
+    const key = String(event.payload.key).toUpperCase()
+
+    keyElements[key].classList.remove("not-pressed")
+    keyElements[key].classList.add("pressed")
   }).then((v) => unlistens.push(v))
 
   listen("keyUp", (event) => {
-    console.log("Up", event.payload)
+    if (typeof event.payload !== "object") return
+    if (!("key" in event.payload)) return
+
+    const key = String(event.payload.key).toUpperCase()
+
+    keyElements[key].classList.add("not-pressed")
+    keyElements[key].classList.remove("pressed")
   }).then((v) => unlistens.push(v))
 
   let targetKeys: string[] = []
@@ -29,8 +41,8 @@
 <div class="flex flex-row items-center justify-evenly w-full gap-x-1.5">
   {#each targetKeys as targetKey}
     <div
-      id={`key_${targetKey.toLowerCase()}`}
-      class="bg-black/20 rounded-lg text-center flex-1 py-0.5 border border-neutral-400"
+      id={`KEY_${targetKey.toUpperCase()}`}
+      class="not-pressed rounded-lg text-center flex-1 py-0.5 border border-neutral-400"
       bind:this={keyElements[targetKey.toUpperCase()]}
     >
       <p class="text-4xl">{targetKey.toUpperCase()}</p>
@@ -40,11 +52,15 @@
 </div>
 
 <div class="flex flex-row items-center justify-evenly w-full gap-x-1">
-  <div class="bg-black/20 rounded-lg text-center flex-1 py-0.5 border border-neutral-400">
+  <div
+    class="not-pressed rounded-lg text-center flex-1 py-0.5 border border-neutral-400"
+  >
     <p class="text-xl">TOTAL</p>
     <p class="text-lg -mt-2">69 M</p>
   </div>
-   <div class="bg-black/20 rounded-lg text-center flex-1 py-0.5 border border-neutral-400">
+  <div
+    class="not-pressed rounded-lg text-center flex-1 py-0.5 border border-neutral-400"
+  >
     <p class="text-xl">KPS</p>
     <p class="text-lg -mt-2">74</p>
   </div>

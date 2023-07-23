@@ -8,3 +8,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .pressed {
+    @apply bg-white text-black
+  }
+
+  .not-pressed {
+    @apply bg-black/20 text-white
+  }
+}
