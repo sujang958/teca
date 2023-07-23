@@ -1,6 +1,6 @@
 <script lang="ts">
   import { listen, type UnlistenFn } from "@tauri-apps/api/event"
-  import { onDestroy } from "svelte"
+  import { onDestroy, onMount } from "svelte"
 
   const unlistens: UnlistenFn[] = []
 
@@ -12,9 +12,40 @@
     console.log("Up", event.payload)
   }).then((v) => unlistens.push(v))
 
+  let targetKeys: string[] = []
+
+  const keyElements: { [key: string]: HTMLDivElement } = {}
+
+  onMount(() => {
+    localStorage.keys ??= '["D", "F", "J", "K"]'
+    targetKeys = JSON.parse(localStorage.keys)
+  })
+
   onDestroy(() => {
     unlistens.forEach((v) => v())
   })
 </script>
 
-<h1>hi</h1>
+<div class="flex flex-row items-center justify-evenly w-full gap-x-1.5">
+  {#each targetKeys as targetKey}
+    <div
+      id={`key_${targetKey.toLowerCase()}`}
+      class="bg-black/20 rounded-lg text-center flex-1 py-0.5 border border-neutral-400"
+      bind:this={keyElements[targetKey.toUpperCase()]}
+    >
+      <p class="text-4xl">{targetKey.toUpperCase()}</p>
+      <p class="text-lg -mt-1">399</p>
+    </div>
+  {/each}
+</div>
+
+<div class="flex flex-row items-center justify-evenly w-full gap-x-1">
+  <div class="bg-black/20 rounded-lg text-center flex-1 py-0.5 border border-neutral-400">
+    <p class="text-xl">TOTAL</p>
+    <p class="text-lg -mt-2">69 M</p>
+  </div>
+   <div class="bg-black/20 rounded-lg text-center flex-1 py-0.5 border border-neutral-400">
+    <p class="text-xl">KPS</p>
+    <p class="text-lg -mt-2">74</p>
+  </div>
+</div>
