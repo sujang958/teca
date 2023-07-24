@@ -38,7 +38,7 @@ fn main() {
       let settings_window = tauri::WindowBuilder::new(
         app,
         "settings",
-        tauri::WindowUrl::App("settings.html".into()),
+        tauri::WindowUrl::App("/settings.html".into()),
       ).build()?;
 
       let _ = settings_window.set_title("Teca settings");
