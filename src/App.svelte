@@ -48,56 +48,68 @@
       "counts",
       JSON.stringify(
         Object.fromEntries(
-          Object.entries(counts).map(([key, value]) => [key, String(value)]),
-        ),
-      ),
+          Object.entries(counts).map(([key, value]) => [key, String(value)])
+        )
+      )
     )
   }).then((v) => unlistens.push(v))
 
-  let targetKeys: string[] = []
-
   const keyElements: { [key: string]: HTMLDivElement } = {}
 
+  type Settings = {
+    bgColor: string
+    borderWidth: number
+    borderColor: string
+  }
+
+  let keys: string[] = []
+  let settings: Settings = {
+    bgColor: "#000000aa",
+    borderColor: "#fff",
+    borderWidth: 1,
+  }
+
+  const onStorageChange = (event: StorageEvent) => {
+    if (event.key == "keys") keys = JSON.parse(localStorage.keys)
+  }
+
   onMount(() => {
-    localStorage.keys ??= '["D", "F", "J", "K"]'
-    targetKeys = JSON.parse(localStorage.keys)
+    window.addEventListener("storage", onStorageChange)
+
+    localStorage.settings ??= settings
+    settings = JSON.parse(localStorage.settings)
+
+    localStorage.keys ??= ["D", "F", "J", "K"]
+    keys = JSON.parse(localStorage.keys)
 
     localStorage.counts ??= "{}"
 
     counts = Object.fromEntries(
       Object.entries(JSON.parse(localStorage.counts))
         .filter(
-          (value): value is [string, string] => typeof value[1] === "string",
+          (value): value is [string, string] => typeof value[1] === "string"
         )
-        .map(([key, value]) => [key, BigInt(value)]),
+        .map(([key, value]) => [key, BigInt(value)])
     )
   })
 
-  const onStorageChange = (event: StorageEvent) => {
-    if (event.key == "keys") {
-      targetKeys = JSON.parse(event.newValue)
-    }
-  }
-
-  window.addEventListener("storage", onStorageChange, false)
-
   onDestroy(() => {
-    clearInterval(countsInterval)
     window.removeEventListener("storage", onStorageChange)
+    clearInterval(countsInterval)
     unlistens.forEach((v) => v())
   })
 </script>
 
 <div class="flex flex-row items-center justify-evenly w-full gap-x-1.5">
-  {#each targetKeys as targetKey}
+  {#each keys as key}
     <div
-      id={`KEY_${targetKey.toUpperCase()}`}
+      id={`KEY_${key.toUpperCase()}`}
       class="not-pressed rounded-lg text-center flex-1 py-0.5 border border-neutral-400"
-      bind:this={keyElements[targetKey.toUpperCase()]}
+      bind:this={keyElements[key.toUpperCase()]}
     >
-      <p class="text-4xl">{targetKey.toUpperCase()}</p>
+      <p class="text-4xl">{key.toUpperCase()}</p>
       <p class="text-lg -mt-1">
-        {counts[targetKey.toUpperCase()] ?? 0n}
+        {counts[key.toUpperCase()] ?? 0n}
       </p>
     </div>
   {/each}
@@ -110,7 +122,7 @@
     <p class="text-xl">TOTAL</p>
     <p class="text-lg -mt-2">
       {Object.entries(counts)
-        .filter(([key, _]) => targetKeys.includes(key))
+        .filter(([key, _]) => keys.includes(key))
         .map(([_, value]) => value)
         .reduce((a, b) => a + b, 0n)}
     </p>

@@ -1,15 +1,72 @@
-<div class="flex flex-col">
+<script lang="ts">
+</script>
+
+<div class="flex flex-col gap-y-4">
   <p class="text-3xl font-semibold">Settings</p>
-  <div class="py-3" />
+  <div class="py-1" />
   <label class="text-sm flex flex-col gap-y-2">
     Keys
     <input
       type="text"
       class="rounded-lg bg-neutral-950 border border-neutral-700 px-1.5 outline-none w-min text-base py-1"
-      value={localStorage.getItem("keys")}
+      value={String(localStorage.keys)
+        .replaceAll('"', "")
+        .replace("[", "")
+        .replace("]", "")}
       on:input={(event) => {
         if (!(event.target instanceof HTMLInputElement)) return
-        localStorage.setItem("keys", event.target.value)
+
+        localStorage.keys = JSON.stringify(
+          event.target.value.replaceAll(" ", "").split(",")
+        )
+      }}
+    />
+  </label>
+  <label class="text-sm flex flex-col gap-y-2">
+    Background Color
+    <input
+      type="text"
+      class="rounded-lg bg-neutral-950 border border-neutral-700 px-1.5 outline-none w-min text-base py-1"
+      value={JSON.parse(localStorage.settings).bgColor}
+      on:input={(event) => {
+        if (!(event.target instanceof HTMLInputElement)) return
+
+        localStorage.settings = JSON.stringify({
+          ...JSON.parse(localStorage.settings),
+          bgColor: event.target.value,
+        })
+      }}
+    />
+  </label>
+  <label class="text-sm flex flex-col gap-y-2">
+    Border Width
+    <input
+      type="number"
+      class="rounded-lg bg-neutral-950 border border-neutral-700 px-1.5 outline-none w-min text-base py-1"
+      value={JSON.parse(localStorage.settings).borderWidth}
+      on:input={(event) => {
+        if (!(event.target instanceof HTMLInputElement)) return
+
+        localStorage.settings = JSON.stringify({
+          ...JSON.parse(localStorage.settings),
+          borderWidth: event.target.valueAsNumber,
+        })
+      }}
+    />
+  </label>
+  <label class="text-sm flex flex-col gap-y-2">
+    Border Color
+    <input
+      type="text"
+      class="rounded-lg bg-neutral-950 border border-neutral-700 px-1.5 outline-none w-min text-base py-1"
+      value={JSON.parse(localStorage.settings).borderColor}
+      on:input={(event) => {
+        if (!(event.target instanceof HTMLInputElement)) return
+
+        localStorage.settings = JSON.stringify({
+          ...JSON.parse(localStorage.settings),
+          borderColor: event.target.value,
+        })
       }}
     />
   </label>
