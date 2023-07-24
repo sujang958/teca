@@ -73,8 +73,17 @@
     )
   })
 
+  const onStorageChange = (event: StorageEvent) => {
+    if (event.key == "keys") {
+      targetKeys = JSON.parse(event.newValue)
+    }
+  }
+
+  window.addEventListener("storage", onStorageChange, false)
+
   onDestroy(() => {
     clearInterval(countsInterval)
+    window.removeEventListener("storage", onStorageChange)
     unlistens.forEach((v) => v())
   })
 </script>
