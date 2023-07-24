@@ -1,7 +1,7 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use tauri::Manager;
+use tauri::{Manager, Size, LogicalSize};
 use device_query::{DeviceQuery, DeviceState, Keycode};
 use std;
 
@@ -34,6 +34,15 @@ fn main() {
           past_keys = pressed_keys.clone();
         }
       });
+
+      let settings_window = tauri::WindowBuilder::new(
+        app,
+        "settings", /* the unique window label */
+        tauri::WindowUrl::App("settings.html".into()),
+      ).build()?;
+
+      let _ = settings_window.set_title("Teca settings");
+      let _ = settings_window.set_size(Size::Logical(LogicalSize { width: 400.0, height: 700.0 }));
     
       Ok(())
     })

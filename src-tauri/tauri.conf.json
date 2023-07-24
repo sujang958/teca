@@ -37,23 +37,12 @@
       {
         "fullscreen": false,
         "resizable": true,
-        "title": "teca",
+        "title": "Teca",
         "width": 270,
         "height": 130,
         "label": "main",
         "decorations": false,
         "transparent": true
-      },
-      {
-        "fullscreen": false,
-        "resizable": true,
-        "title": "teca settings",
-        "width": 400,
-        "height": 700,
-        "label": "settings",
-        "decorations": true,
-        "transparent": false,
-        "url": "settings.html"
       }
     ]
   }
