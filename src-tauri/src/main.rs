@@ -37,7 +37,7 @@ fn main() {
 
       let settings_window = tauri::WindowBuilder::new(
         app,
-        "settings", /* the unique window label */
+        "settings",
         tauri::WindowUrl::App("settings.html".into()),
       ).build()?;
 
