@@ -1,4 +1,15 @@
 <script lang="ts">
+  import { invoke } from "@tauri-apps/api"
+  import { appWindow } from "@tauri-apps/api/window"
+  import { onDestroy } from "svelte"
+
+  const unlisten = appWindow.onCloseRequested(() => {
+    invoke("close_all")
+  })
+
+  onDestroy(() => {
+    unlisten.then((f) => f())
+  })
 </script>
 
 <div class="flex flex-col gap-y-4">
@@ -35,7 +46,7 @@
       }}
     />
   </label>
-   <label class="text-sm flex flex-col gap-y-2">
+  <label class="text-sm flex flex-col gap-y-2">
     Text Color
     <input
       type="text"
@@ -51,7 +62,7 @@
       }}
     />
   </label>
-    <label class="text-sm flex flex-col gap-y-2">
+  <label class="text-sm flex flex-col gap-y-2">
     Background Color when Hover
     <input
       type="text"
@@ -67,7 +78,7 @@
       }}
     />
   </label>
-   <label class="text-sm flex flex-col gap-y-2">
+  <label class="text-sm flex flex-col gap-y-2">
     Text Color when pressed
     <input
       type="text"

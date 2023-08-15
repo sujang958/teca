@@ -10,6 +10,11 @@ struct Payload {
   key: String,
 }
 
+#[tauri::command]
+fn close_all(app_handle: tauri::AppHandle) {
+  app_handle.exit(0);
+}
+
 fn main() {
   tauri::Builder::default()
     .setup(|app| {
@@ -37,6 +42,7 @@ fn main() {
     
       Ok(())
     })
+    .invoke_handler(tauri::generate_handler![close_all])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
 }

@@ -1,5 +1,7 @@
 <script lang="ts">
+  import { invoke } from "@tauri-apps/api"
   import { listen, type UnlistenFn } from "@tauri-apps/api/event"
+  import { appWindow } from "@tauri-apps/api/window"
   import { onDestroy, onMount } from "svelte"
 
   const unlistens: UnlistenFn[] = []
@@ -13,6 +15,14 @@
 
   let counts: { [key: string]: bigint } = {}
   let kps = 0n
+
+  const unlisten = appWindow.onCloseRequested(() => {
+    invoke("close_all")
+  })
+
+  onDestroy(() => {
+    unlisten.then((f) => f())
+  })
 
   listen("keyDown", (event) => {
     if (!isPayload(event.payload)) return
@@ -82,6 +92,10 @@
   }
 
   onMount(() => {
+    window.addEventListener("unload", () => {
+      alert("!")
+    })
+
     window.addEventListener("storage", onStorageChange)
 
     localStorage.settings ??= JSON.stringify(settings)
