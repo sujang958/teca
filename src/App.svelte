@@ -12,13 +12,7 @@
   }
 
   let counts: { [key: string]: bigint } = {}
-  let tempCounts = 0n
   let kps = 0n
-
-  const countsInterval = setInterval(() => {
-    kps = tempCounts
-    tempCounts = 0n
-  }, 1000)
 
   listen("keyDown", (event) => {
     if (!isPayload(event.payload)) return
@@ -35,7 +29,8 @@
   listen("keyUp", (event) => {
     if (!isPayload(event.payload)) return
 
-    tempCounts += 1n
+    kps += 1n
+    setTimeout(() => (kps -= 1n), 1000)
 
     const key = String(event.payload.key).toUpperCase()
     const keyElement = keyElements[key]
@@ -108,7 +103,7 @@
 
   onDestroy(() => {
     window.removeEventListener("storage", onStorageChange)
-    clearInterval(countsInterval)
+    // clearInterval(countsInterval)
     unlistens.forEach((v) => v())
   })
 </script>

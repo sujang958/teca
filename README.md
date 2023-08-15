@@ -9,6 +9,6 @@
 
 ## Features
 
-- [x] Lightweight, < 5mb size
+- [x] Lightweight, < 5mb sized
 - [x] Customizable color, border, etc.
 - [x] Recorded stats
